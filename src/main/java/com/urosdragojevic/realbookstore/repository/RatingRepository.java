@@ -35,6 +35,7 @@ public class RatingRepository {
                     preparedStatement.setInt(2, rating.getBookId());
                     preparedStatement.setInt(3, rating.getUserId());
                     preparedStatement.executeUpdate();
+                    LOG.info("Rating updated for book with ID {} by user ID {}", rating.getBookId(), rating.getUserId());
                 }
             } else {
                 try (PreparedStatement preparedStatement = connection.prepareStatement(query3)) {
@@ -42,9 +43,11 @@ public class RatingRepository {
                     preparedStatement.setInt(2, rating.getUserId());
                     preparedStatement.setInt(3, rating.getRating());
                     preparedStatement.executeUpdate();
+                    LOG.info("New rating added for book with ID {} by user ID {}", rating.getBookId(), rating.getUserId());
                 }
             }
         } catch (SQLException e) {
+            LOG.error("Error while creating or updating rating for book with ID {} by user ID {}: {}", rating.getBookId(), rating.getUserId(), e.getMessage());
             e.printStackTrace();
         }
     }
@@ -59,6 +62,7 @@ public class RatingRepository {
                 ratingList.add(new Rating(rs.getInt(1), rs.getInt(2), rs.getInt(3)));
             }
         } catch (SQLException e) {
+            LOG.error("Error while fetching ratings for book with ID {}: {}", bookId, e.getMessage());
             e.printStackTrace();
         }
         return ratingList;

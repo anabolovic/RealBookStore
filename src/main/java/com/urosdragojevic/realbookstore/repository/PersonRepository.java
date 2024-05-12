@@ -33,6 +33,7 @@ public class PersonRepository {
                 personList.add(createPersonFromResultSet(rs));
             }
         } catch (SQLException e) {
+            LOG.error("Error while fetching all persons: {}", e.getMessage());
             e.printStackTrace();
         }
         return personList;
@@ -48,6 +49,9 @@ public class PersonRepository {
             while (rs.next()) {
                 personList.add(createPersonFromResultSet(rs));
             }
+        } catch (SQLException e) {
+            LOG.error("Error while searching for persons with searchTerm '{}': {}", searchTerm, e.getMessage());
+            e.printStackTrace();
         }
         return personList;
     }
@@ -61,6 +65,7 @@ public class PersonRepository {
                 return createPersonFromResultSet(rs);
             }
         } catch (SQLException e) {
+            LOG.error("Error while fetching person with ID {}: {}", personId, e.getMessage());
             e.printStackTrace();
         }
 
@@ -73,7 +78,9 @@ public class PersonRepository {
              Statement statement = connection.createStatement();
         ) {
             statement.executeUpdate(query);
+            LOG.warn("Person with ID {} deleted", personId);
         } catch (SQLException e) {
+            LOG.error("Error while deleting person with ID {}: {}", personId, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -98,7 +105,9 @@ public class PersonRepository {
             statement.setString(1, firstName);
             statement.setString(2, email);
             statement.executeUpdate();
+            LOG.info("Person with ID {} updated", personUpdate.getId());
         } catch (SQLException e) {
+            LOG.error("Error while updating person with ID {}: {}", personUpdate.getId(), e.getMessage());
             e.printStackTrace();
         }
     }

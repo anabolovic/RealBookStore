@@ -34,6 +34,7 @@ public class UserRepository {
                 return new User(id, username1, password);
             }
         } catch (SQLException e) {
+            LOG.error("Error while finding user with username '{}': {}", username, e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -46,6 +47,7 @@ public class UserRepository {
              ResultSet rs = statement.executeQuery(query)) {
             return rs.next();
         } catch (SQLException e) {
+            LOG.error("Error while validating credentials for user '{}': {}", username, e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -57,7 +59,9 @@ public class UserRepository {
              Statement statement = connection.createStatement();
         ) {
             statement.executeUpdate(query);
+            LOG.info("User with ID {} deleted", userId);
         } catch (SQLException e) {
+            LOG.error("Error while deleting user with ID {}: {}", userId, e.getMessage());
             e.printStackTrace();
         }
     }

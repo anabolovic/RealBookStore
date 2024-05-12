@@ -36,6 +36,7 @@ public class RoleRepository {
                 roles.add(new Role(id, name));
             }
         } catch (SQLException e) {
+            LOG.error("Error while fetching roles for user with ID {}: {}", userId, e.getMessage());
             e.printStackTrace();
         }
         return roles;

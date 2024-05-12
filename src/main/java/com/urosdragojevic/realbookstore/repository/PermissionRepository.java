@@ -36,6 +36,7 @@ public class PermissionRepository {
                 permissions.add(new Permission(id, name));
             }
         } catch (SQLException e) {
+            LOG.error("Error while fetching permissions for role with ID {}: {}", roleId, e.getMessage());
             e.printStackTrace();
         }
         return permissions;

@@ -36,6 +36,7 @@ public class BookRepository {
                 bookList.add(book);
             }
         } catch (SQLException e) {
+            LOG.error("Error while fetching all books: {}", e.getMessage());
             e.printStackTrace();
         }
         return bookList;
@@ -54,6 +55,9 @@ public class BookRepository {
             while (rs.next()) {
                 bookList.add(createBookFromResultSet(rs));
             }
+        } catch (SQLException e) {
+            LOG.warn("Error while searching for books: {}", e.getMessage());
+            e.printStackTrace();
         }
         return bookList;
     }
@@ -67,6 +71,7 @@ public class BookRepository {
                 return createBookFromResultSet(rs);
             }
         } catch (SQLException e) {
+            LOG.error("Error while fetching book with ID {}: {}", bookId, e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -94,11 +99,13 @@ public class BookRepository {
                         statement2.setInt(2, genre.getId());
                         statement2.executeUpdate();
                     } catch (SQLException e) {
+                        LOG.error("Error while inserting genre for book with ID {}: {}", finalId, e.getMessage());
                         e.printStackTrace();
                     }
                 });
             }
         } catch (SQLException e) {
+            LOG.warn("Error while creating a new book: {}", e.getMessage());
             e.printStackTrace();
         }
         return id;

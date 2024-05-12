@@ -32,7 +32,9 @@ public class CommentRepository {
             statement.setInt(2, comment.getUserId());
             statement.setString(3, comment.getComment());
             statement.executeUpdate();
+            LOG.info("Comment created for book with ID {}: {}", comment.getBookId(), comment.getComment());
         } catch (SQLException e) {
+            LOG.error("Error while creating comment for book with ID {}: {}", comment.getBookId(), e.getMessage());
             e.printStackTrace();
         }
 
@@ -48,6 +50,7 @@ public class CommentRepository {
                 commentList.add(new Comment(rs.getInt(1), rs.getInt(2), rs.getString(3)));
             }
         } catch (SQLException e) {
+            LOG.warn("Error while fetching comments for book with ID {}: {}", bookId, e.getMessage());
             e.printStackTrace();
         }
         return commentList;
